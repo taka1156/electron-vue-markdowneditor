@@ -1,32 +1,72 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <div class="app-box">
+      <the-navigation class="nav" :routes="routes" />
+      <div class="view">
+        <router-view />
+      </div>
     </div>
-    <router-view />
   </div>
 </template>
 
+<script>
+import TheNavigation from '@/components/organisms/TheNavigation/TheNavigation';
+
+export default {
+  components: {
+    'the-navigation': TheNavigation
+  },
+  data() {
+    return {
+      routes: [
+        {
+          name: 'Help',
+          to: '/',
+          img: require('@/assets/help.svg')
+        },
+        {
+          name: 'Editor',
+          to: '/editor',
+          img: require('@/assets/edit.svg')
+        },
+        {
+          name: 'File',
+          to: '/file',
+          img: require('@/assets/file.svg')
+        },
+        {
+          name: 'Setting',
+          to: '/setting',
+          img: require('@/assets/setting.svg')
+        }
+      ]
+    };
+  }
+};
+</script>
+
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
 }
 
-#nav {
-  padding: 30px;
+.app-box {
+  display: flex;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+.nav {
+  width: 10%;
+  padding: 0;
+  margin: 0;
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+.view {
+  height: 610px;
+  width: 95%;
+  padding: 0;
+  margin: 0;
+  background-color: rgba(0, 0, 0, 0.1);
+  overflow-y: scroll;
+  text-align: left;
 }
 </style>
