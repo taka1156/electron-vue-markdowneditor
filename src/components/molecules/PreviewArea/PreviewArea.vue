@@ -2,11 +2,7 @@
   <div>
     <base-text>Preview</base-text>
     <div class="preview-area" :class="{ 'preview-area--expand': isExpand }">
-      <div
-        class="markdown-body"
-        :class="{ 'markdown-body--expand': isExpand }"
-        v-html="markedValue"
-      ></div>
+      <div class="markdown-body" v-html="markedValue"></div>
     </div>
   </div>
 </template>
@@ -42,7 +38,7 @@ export default {
 
 <style scoped>
 .preview-area {
-  width: 40vw;
+  width: 45vw;
   height: 470px;
   margin: 1px;
   overflow-y: scroll;
@@ -58,12 +54,6 @@ export default {
 .preview-area--expand {
   width: 96vw;
   height: 90vh;
-  margin: 0 auto;
-}
-
-.markdown-body--expand {
-  width: 95vw;
-  height: 95vh;
   margin: 0 auto;
 }
 </style>

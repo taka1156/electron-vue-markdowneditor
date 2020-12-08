@@ -1,6 +1,6 @@
 const _fs = require('fs');
 const fs = require('fs').promises;
-import { md } from '@/constants/index.js';
+import { FILE_MARKDOWN } from '@/constants/index.js';
 
 /**
  * ファイルの保存、読み込み可否に関するalertのみ記載
@@ -9,14 +9,14 @@ import { md } from '@/constants/index.js';
 // 初期フォルダ、初期ファイルの生成
 const createInitFolder = async (FOLDER_PATH, FILE_PATH) => {
   if (!_fs.existsSync(FOLDER_PATH)) {
-    await fs.mkdirSync(FOLDER_PATH);
-    await fs.writeFile(FILE_PATH, md, err => {
-      if (err) {
-        throw err;
-      } else {
-        alert(`${FILE_PATH}に初期フォルダ、及びサンプルを作成しました。`);
-      }
-    });
+    await _fs.mkdirSync(FOLDER_PATH);
+    try {
+      await fs.writeFile(FILE_PATH, FILE_MARKDOWN);
+      alert(`${FILE_PATH}に初期フォルダ、及びサンプルを作成しました。`);
+    } catch (e) {
+      console.error(e);
+      alert(`${FILE_PATH}に初期フォルダ、及びサンプルを作成に失敗しました。`);
+    }
   }
 };
 
@@ -43,11 +43,12 @@ const readFile = async FILE_PATH => {
 };
 
 const saveFile = async (FILE_PATH, text) => {
-  if (FILE_PATH) {
-    await fs.writeFile(FILE_PATH, text, err => {
-      if (err) throw err;
-    });
+  try {
+    await fs.writeFile(FILE_PATH, text);
     alert('保存しました。');
+  } catch (e) {
+    console.error(e);
+    alert('保存に失敗しました。');
   }
 };
 
