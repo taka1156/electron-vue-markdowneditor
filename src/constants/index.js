@@ -1,3 +1,3 @@
-import { md } from '@/constants/sample.md.js';
+import { PLACEHOLDER_MARKDOWN, FILE_MARKDOWN } from '@/constants/sample.md.js';
 
-export { md };
+export { PLACEHOLDER_MARKDOWN, FILE_MARKDOWN };

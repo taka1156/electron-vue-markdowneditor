@@ -35,7 +35,7 @@ import PreviewArea from '../../molecules/PreviewArea/PreviewArea';
 import SlideUi from '../../molecules/SlideUi/SlideUi';
 import { mapGetters, mapActions } from 'vuex';
 import { slide } from '@/plugins/slide/index.js';
-import { md } from '@/constants/index.js';
+import { PLACEHOLDER_MARKDOWN } from '@/constants/index.js';
 
 export default {
   name: 'EditorBox',
@@ -47,7 +47,7 @@ export default {
   },
   data() {
     return {
-      markedValue: md,
+      markedValue: PLACEHOLDER_MARKDOWN,
       isSlide: false,
       slides: []
     };
@@ -65,7 +65,7 @@ export default {
   },
   destroyed() {
     // 初期テキストでなければページを抜けるときに、入力値をvuexに保存
-    if (this.markedValue !== md) {
+    if (this.markedValue !== PLACEHOLDER_MARKDOWN) {
       this.setText(this.markedValue);
     }
   },
@@ -74,14 +74,15 @@ export default {
     ...mapActions('edit', ['initText', 'setText']),
     newText() {
       if (confirm('現在の入力内容を破棄してよろしいですか?')) {
-        this.markedValue = md;
+        this.markedValue = PLACEHOLDER_MARKDOWN;
+        this.makeSilde();
         this.initFileInfo();
         this.initText();
       }
     },
     updateText(text) {
       // テキスト更新(入力のたびに更新)
-      this.markedValue = text === '' ? md : text;
+      this.markedValue = text === '' ? PLACEHOLDER_MARKDOWN : text;
       this.makeSilde();
     },
     makeSilde() {

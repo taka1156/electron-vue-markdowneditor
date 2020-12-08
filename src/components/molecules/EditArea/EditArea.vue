@@ -6,7 +6,7 @@
 
 <script>
 import BaseTextArea from '../../atoms/BaseTextArea/BaseTextArea';
-import { md } from '@/constants/index.js';
+import { PLACEHOLDER_MARKDOWN } from '@/constants/index.js';
 
 export default {
   name: 'EditArea',
@@ -25,7 +25,7 @@ export default {
       form: {
         id: 'editor',
         label: 'Editor',
-        placeholder: md
+        placeholder: PLACEHOLDER_MARKDOWN
       }
     };
   },
