@@ -79,8 +79,6 @@ const actions = {
     const FILE_PATH = `${context.getters.folderPath}/${context.getters.files[index]}`;
     // ファイルの読み込み
     const { text, error } = await FsWrapper.readFile(FILE_PATH);
-    console.log(text);
-    console.log(error);
     if (error == null) {
       context.commit('setPreText', text);
       context.commit('setFileIndex', index);
@@ -104,7 +102,6 @@ const actions = {
       ]
     });
     if (!canceled) {
-      console.log(text);
       await FsWrapper.saveFile(filePath, text);
       context.commit('setFilePath', filePath);
       context.commit('setPreText', text);

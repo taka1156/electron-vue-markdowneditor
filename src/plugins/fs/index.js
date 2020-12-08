@@ -43,7 +43,6 @@ const readFile = async FILE_PATH => {
 };
 
 const saveFile = async (FILE_PATH, text) => {
-  console.log(text);
   if (FILE_PATH) {
     await fs.writeFile(FILE_PATH, text, err => {
       if (err) throw err;
