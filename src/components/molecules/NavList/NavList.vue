@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul class="nav-list">
-      <li v-for="(item, index) in routes" :key="index">
+      <li v-for="(item, index) in routes" :key="`nav_${index}`">
         <nav-list-item :nav-item="item" />
       </li>
     </ul>
@@ -30,8 +30,8 @@ export default {
 /* css reset */
 ul,
 li {
-  margin: 0;
   padding: 0;
+  margin: 0;
   list-style-type: none;
 }
 
