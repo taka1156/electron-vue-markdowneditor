@@ -39,7 +39,7 @@ export default {
 
 <style scoped>
 ::v-deep .base-text-area {
-  width: 35vw;
+  width: 40vw;
   height: 470px;
   margin: 1px;
   border: 1px solid gray;
