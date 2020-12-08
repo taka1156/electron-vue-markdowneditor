@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="file-list-item">
-      <base-text>{{ file.name }}</base-text>
+      <base-text>{{ file }}</base-text>
+      <p v-if="isEdit">:[編集中]</p>
     </div>
   </div>
 </template>
@@ -15,9 +16,14 @@ export default {
     'base-text': BaseText
   },
   props: {
+    isEdit: {
+      type: Boolean,
+      default: false,
+      required: true
+    },
     file: {
-      type: Object,
-      default: () => {},
+      type: String,
+      default: '',
       required: true
     }
   }

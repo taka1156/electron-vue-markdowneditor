@@ -1,9 +1,20 @@
 <template>
   <div>
-    <base-btn @btn-click="isSlide = !isSlide">
-      {{ !isSlide ? 'slide' : 'preview' }}
-    </base-btn>
     <div class="editor-box">
+      <div class="editor-box__btns">
+        <base-btn @btn-click="isSlide = !isSlide">
+          {{ !isSlide ? 'SlideView' : 'PreView' }}
+        </base-btn>
+        <base-btn @btn-click="newText">
+          New
+        </base-btn>
+        <base-btn v-show="filePath !== ''" @btn-click="overWrite">
+          OverWrite
+        </base-btn>
+        <base-btn @btn-click="save">
+          Save
+        </base-btn>
+      </div>
       <div class="editor-box__editor">
         <edit-area :pre-text="inputText" @update-text="updateText" />
         <div v-if="!isSlide">
@@ -42,7 +53,8 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('edit', ['inputText'])
+    ...mapGetters('edit', ['inputText']),
+    ...mapGetters('file', ['filePath'])
   },
   created() {
     if (this.inputText !== '') {
@@ -52,11 +64,21 @@ export default {
     this.makeSilde();
   },
   destroyed() {
-    // ページを抜けるときに、入力値をvuexに保存
-    this.setText(this.markedValue);
+    // 初期テキストでなければページを抜けるときに、入力値をvuexに保存
+    if (this.markedValue !== md) {
+      this.setText(this.markedValue);
+    }
   },
   methods: {
-    ...mapActions('edit', ['setText']),
+    ...mapActions('file', ['initFileInfo', 'saveFile', 'overwriteFile']),
+    ...mapActions('edit', ['initText', 'setText']),
+    newText() {
+      if (confirm('現在の入力内容を破棄してよろしいですか?')) {
+        this.markedValue = md;
+        this.initFileInfo();
+        this.initText();
+      }
+    },
     updateText(text) {
       // テキスト更新(入力のたびに更新)
       this.markedValue = text === '' ? md : text;
@@ -68,6 +90,14 @@ export default {
       if (this.slides.length === 1) {
         // スライドが１ページのみになった場合スライド強制解除
         this.isSlide = false;
+      }
+    },
+    save() {
+      this.saveFile(this.markedValue);
+    },
+    overWrite() {
+      if (confirm('上書きしてもよろしいですか?')) {
+        this.overwriteFile(this.markedValue);
       }
     }
   }
@@ -97,6 +127,13 @@ export default {
   width: 90%;
   padding: 0;
   margin: 0 auto;
+}
+
+.editor-box__btns {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-right: 0;
 }
 
 .editor-box__editor {

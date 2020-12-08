@@ -1,8 +1,13 @@
 <template>
   <div>
-    <ul>
-      <li v-for="(file, index) in filesDummy" :key="`file_${index}`">
-        <file-list-item :file="file" />
+    <p v-if="files.length === 0">
+      ファイルなし
+    </p>
+    <ul v-else>
+      <li v-for="(file, index) in files" :key="`file_${index}`">
+        <div @click="selectFile(index)">
+          <file-list-item :is-edit="index === fileIndex" :file="file" />
+        </div>
       </li>
     </ul>
   </div>
@@ -10,29 +15,55 @@
 
 <script>
 import FileListItem from '../FileListItem/FileListItem';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'FileList',
   components: {
     'file-list-item': FileListItem
   },
-  /*props: {
-    files: {
-      type: Array,
-      default: () => [],
-      required: true
+  computed: {
+    ...mapGetters('edit', ['inputText']),
+    ...mapGetters('file', [
+      'folderPath',
+      'filePath',
+      'files',
+      'fileIndex',
+      'preText'
+    ]),
+    isDifference() {
+      return this.inputText !== this.preText;
     }
-  },*/
-  data() {
-    return {
-      filesDummy: [
-        { name: 'sample1.md' },
-        { name: 'sample2.md' },
-        { name: 'sample3.md' },
-        { name: 'sample4.md' },
-        { name: 'sample5.md' }
-      ]
-    };
+  },
+  async created() {
+    await this.initFolder();
+    await this.readFiles();
+  },
+  methods: {
+    ...mapActions('file', ['initFolder', 'readFiles', 'readFile']),
+    ...mapActions('edit', ['setText']),
+    isSave() {
+      // 最後に開いた状態と現在のファイルに差分があれば、確認をおこなう
+      if (this.Difference) {
+        return confirm('現在のファイルを保存していませんが、よろしいですか?');
+      } else {
+        return true;
+      }
+    },
+    async selectFile(index) {
+      if (this.fileIndex !== index) {
+        // 開くファイルが違う場合は、別ファイルを開く
+        if (this.isSave()) {
+          const isSuccess = await this.readFile(index);
+          if (isSuccess) {
+            this.setText(this.preText);
+          }
+        }
+      } else {
+        alert('すでに開いています。');
+      }
+      this.$router.push('/editor');
+    }
   }
 };
 </script>

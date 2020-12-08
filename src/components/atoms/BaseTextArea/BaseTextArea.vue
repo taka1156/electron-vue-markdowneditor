@@ -3,7 +3,7 @@
     <label :for="form.id">{{ form.label }}</label>
     <textarea
       :id="form.id"
-      :value="initText"
+      :value="preText"
       class="base-text-area"
       :placeholder="form.placeholder"
       @input="sendText"
@@ -24,15 +24,6 @@ export default {
       default: () => {},
       required: true
     }
-  },
-  data() {
-    return {
-      initText: ''
-    };
-  },
-  created() {
-    // 他ページから戻ってきたときのみ、前回の入力データを初期値にする。
-    this.initText = this.preText;
   },
   methods: {
     sendText(e) {

@@ -15,7 +15,7 @@ const mutations = {
 };
 
 const actions = {
-  clearText(context) {
+  initText(context) {
     context.commit('setInputText', '');
   },
   setText(context, text) {

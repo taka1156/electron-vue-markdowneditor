@@ -1,6 +1,10 @@
 const { app, dialog } = require('electron').remote;
 import FsWrapper from '@/plugins/fs/index.js';
 
+/**
+ * !!! alertはコチラに書き込まない
+ */
+
 const state = {
   folderPath: `${app.getPath('documents')}/md`, // 選択中のフォルダのパス
   filePath: '', // ファイルまでのフルパス
@@ -10,6 +14,12 @@ const state = {
 };
 
 const getters = {
+  folderPath(state) {
+    return state.folderPath;
+  },
+  filePath(state) {
+    return state.filePath;
+  },
   files(state) {
     return state.files;
   },
@@ -34,6 +44,9 @@ const mutations = {
   setFilePath(state, filePath) {
     state.filePath = filePath;
   },
+  setFileIndex(state, fileIndex) {
+    state.fileIndex = fileIndex;
+  },
   // 最後に保存したテキストの内容
   setPreText(state, preText) {
     state.preText = preText;
@@ -41,38 +54,46 @@ const mutations = {
 };
 
 const actions = {
-  initFolder() {
+  initFileInfo(context) {
+    context.commit('setPreText', '');
+    context.commit('setFileIndex', -1);
+    context.commit('setFilePath', '');
+  },
+  async initFolder() {
     const FOLDER_PATH = `${app.getPath('documents')}/md`;
     const FILE_PATH = `${FOLDER_PATH}/sample.md`;
     // 初期フォルダ、ファイルの生成
-    FsWrapper.createInitFolder(FOLDER_PATH, FILE_PATH);
+    await FsWrapper.createInitFolder(FOLDER_PATH, FILE_PATH);
   },
-  readFiles(context) {
+  async readFiles(context) {
     const PATH = context.getters.folderPath;
-    const FILES = FsWrapper.readFiles(PATH);
-    if (!FILES.length === 0) {
-      // 読み込み失敗(フォルダ、もしくはファイルがない)
+    const files = await FsWrapper.readFiles(PATH);
+    if (files.length === 0) {
       context.commit('setFiles', []);
     } else {
       // 読み込み成功
-      context.commit('setFiles', FILES);
+      context.commit('setFiles', files);
     }
   },
-  readFile(context, index) {
+  async readFile(context, index) {
     const FILE_PATH = `${context.getters.folderPath}/${context.getters.files[index]}`;
-    if (context.getters.filePath === FILE_PATH) {
-      alert('すでに開いています。');
-      return;
-    }
     // ファイルの読み込み
-    const text = FsWrapper.readFile(FILE_PATH);
-    context.commit('setPreText', text);
-    context.commit('setFilePath', FILE_PATH);
+    const { text, error } = await FsWrapper.readFile(FILE_PATH);
+    console.log(text);
+    console.log(error);
+    if (error == null) {
+      context.commit('setPreText', text);
+      context.commit('setFileIndex', index);
+      context.commit('setFilePath', FILE_PATH);
+      return true;
+    } else {
+      return false;
+    }
   },
-  saveFile(context) {
+  async saveFile(context, text) {
     // 新規保存
     const DEFAULT = `${app.getPath('documents')}/md`;
-    const FILE_PATH = dialog.showSaveDialog({
+    const { canceled, filePath } = await dialog.showSaveDialog({
       title: 'Save as',
       defaultPath: DEFAULT,
       filters: [
@@ -82,10 +103,19 @@ const actions = {
         }
       ]
     });
+    if (!canceled) {
+      console.log(text);
+      await FsWrapper.saveFile(filePath, text);
+      context.commit('setFilePath', filePath);
+      context.commit('setPreText', text);
+    }
+  },
+  async overwriteFile(context, text) {
+    const FILE_PATH = context.getters.filePath;
     if (FILE_PATH) {
-      FsWrapper.saveFile(FILE_PATH, context.getters.preText);
+      await FsWrapper.saveFile(FILE_PATH, text);
       context.commit('setFilePath', FILE_PATH);
-      context.commit('setPreText', context.getters.preText);
+      context.commit('setPreText', text);
     }
   }
 };
