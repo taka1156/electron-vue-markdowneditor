@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import BaseTextArea from '../../atoms/TextArea/BaseTextArea';
+import BaseTextArea from '../../atoms/BaseTextArea/BaseTextArea';
 import { md } from '@/constants/index.js';
 
 export default {
@@ -39,9 +39,9 @@ export default {
 
 <style scoped>
 ::v-deep .base-text-area {
-  border: 1px solid gray;
-  height: 470px;
   width: 35vw;
+  height: 470px;
   margin: 1px;
+  border: 1px solid gray;
 }
 </style>

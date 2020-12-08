@@ -46,8 +46,9 @@ export default {
 <style scoped>
 textarea {
   display: block;
-  margin: 0;
   padding: 0;
+  margin: 0;
+  resize: none;
   outline-color: cornflowerblue;
 }
 </style>

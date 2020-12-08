@@ -8,9 +8,9 @@
     >
       <preview-area :is-expand="isExpandSlide" :row-text="slide" />
       <div class="slide-ui">
-        <button class="slide-ui__btn" @click="prevPage()">&lt;</button>
-        <button class="slide-ui__btn" @click="nextPage()">&gt;</button>
-        <button class="slide-ui__btn" @click="expandSlide()">「」</button>
+        <base-btn @btn-click="prevPage()">&lt;</base-btn>
+        <base-btn @btn-click="nextPage()">&gt;</base-btn>
+        <base-btn @btn-click="expandSlide()">「」</base-btn>
         {{ maxPage - (maxPage - page - 1) }}/{{ maxPage }}
         <input v-model="page" type="range" min="0" :max="maxPage - 1" step="1" />
       </div>
@@ -19,11 +19,13 @@
 </template>
 
 <script>
+import BaseBtn from '../../atoms/BaseBtn/BaseBtn';
 import PreviewArea from '../PreviewArea/PreviewArea';
 
 export default {
   name: 'SlideUi',
   components: {
+    'base-btn': BaseBtn,
     'preview-area': PreviewArea
   },
   props: {
@@ -70,19 +72,27 @@ export default {
 </script>
 
 <style scoped>
-.slide-ui {
-  padding: 0;
-  border: 0.2px solid gray;
-  background-color: white;
-  box-sizing: border-box;
+.slide-ui ::v-deep .base-btn--extend {
+  width: 20px;
+  height: 80%;
+  margin: 0;
+  font-size: 10px;
+  color: gray;
 }
 
-.slide-ui__btn {
-  appearance: none;
-  height: 100%;
-  font-size: 10px;
-  border-radius: 10px;
-  background-color: cornflowerblue;
+.slide-ui ::v-deep .base-btn--extend:hover,
+.slide-ui ::v-deep .base-btn--extend:focus,
+.slide-ui ::v-deep .base-btn--extend:active {
+  color: cornflowerblue;
+  border: 1px solid cornflowerblue;
+}
+
+.slide-ui {
+  display: flex;
+  justify-content: space-around;
+  padding: 0;
+  background-color: white;
+  border: 0.2px solid gray;
 }
 
 input[type='range'] {

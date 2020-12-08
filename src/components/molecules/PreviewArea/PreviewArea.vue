@@ -11,7 +11,6 @@
 import BaseText from '../../atoms/BaseText/BaseText';
 import 'highlight.js/styles/github.css';
 import { markedWrap } from '@/plugins/marked/index.js';
-import { md } from '@/constants/index.js';
 
 export default {
   name: 'PreviewArea',
@@ -31,7 +30,7 @@ export default {
   },
   computed: {
     markedValue() {
-      return markedWrap(this.rowText === '' ? md : this.rowText);
+      return markedWrap(this.rowText);
     }
   }
 };
@@ -39,16 +38,16 @@ export default {
 
 <style scoped>
 .preview-area {
-  border: 1px solid gray;
-  height: 470px;
   width: 35vw;
-  overflow-y: scroll;
+  height: 470px;
   margin: 1px;
+  overflow-y: scroll;
   background-color: white;
+  border: 1px solid gray;
 }
 
 .expand-slide {
-  height: 90vh;
   width: 100vw;
+  height: 90vh;
 }
 </style>
