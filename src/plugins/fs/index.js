@@ -10,13 +10,13 @@ import { FILE_MARKDOWN } from '@/constants/index.js';
 const createInitFolder = async (FOLDER_PATH, FILE_PATH) => {
   if (!_fs.existsSync(FOLDER_PATH)) {
     await _fs.mkdirSync(FOLDER_PATH);
-    await fs.writeFile(FILE_PATH, FILE_MARKDOWN, err => {
-      if (err) {
-        throw err;
-      } else {
-        alert(`${FILE_PATH}に初期フォルダ、及びサンプルを作成しました。`);
-      }
-    });
+    try {
+      await fs.writeFile(FILE_PATH, FILE_MARKDOWN);
+      alert(`${FILE_PATH}に初期フォルダ、及びサンプルを作成しました。`);
+    } catch (e) {
+      console.error(e);
+      alert(`${FILE_PATH}に初期フォルダ、及びサンプルを作成に失敗しました。`);
+    }
   }
 };
 
@@ -43,11 +43,12 @@ const readFile = async FILE_PATH => {
 };
 
 const saveFile = async (FILE_PATH, text) => {
-  if (FILE_PATH) {
-    await fs.writeFile(FILE_PATH, text, err => {
-      if (err) throw err;
-    });
+  try {
+    await fs.writeFile(FILE_PATH, text);
     alert('保存しました。');
+  } catch (e) {
+    console.error(e);
+    alert('保存に失敗しました。');
   }
 };
 
