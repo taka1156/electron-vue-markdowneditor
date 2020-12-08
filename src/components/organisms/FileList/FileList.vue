@@ -3,7 +3,7 @@
     <p v-if="files.length === 0">
       ファイルなし
     </p>
-    <ul v-else>
+    <ul v-else class="file-list">
       <li v-for="(file, index) in files" :key="`file_${index}`">
         <div @click="selectFile(index)">
           <file-list-item :is-edit="index === fileIndex" :file="file" />
@@ -79,4 +79,11 @@ li {
 }
 
 /* css reset */
+
+.file-list {
+  width: 90vw;
+  height: 90vh;
+  margin: 0 auto;
+  overflow-y: scroll;
+}
 </style>
