@@ -5,9 +5,9 @@
     </button>
     <div class="editor-box">
       <div class="editor-box__editor">
-        <edit-area @update-text="updateMdText" />
+        <edit-area :pre-text="inputText" @update-text="updateText" />
         <div v-if="!isSlide">
-          <preview-area :marked-value="markedValue" />
+          <preview-area :row-text="markedValue" />
         </div>
         <div v-else>
           <slide-ui :slides="slides" />
@@ -21,7 +21,7 @@
 import EditArea from '../../molecules/EditArea/EditArea';
 import PreviewArea from '../../molecules/PreviewArea/PreviewArea';
 import SlideUi from '../../molecules/SlideUi/SlideUi';
-import { markedWrap } from '@/plugins/marked/index.js';
+import { mapGetters, mapActions } from 'vuex';
 import { slide } from '@/plugins/slide/index.js';
 
 export default {
@@ -38,15 +38,28 @@ export default {
       slides: []
     };
   },
+  computed: {
+    ...mapGetters('edit', ['inputText'])
+  },
+  created() {
+    if (this.inputText !== '') {
+      // 他ページから戻ってきたときに、前回の入力データを初期値にする。
+      this.markedValue = this.inputText;
+    }
+  },
+  destroyed() {
+    // ページを抜けるときに、入力値をvuexに保存
+    this.setText(this.markedValue);
+  },
   methods: {
-    updateMdText(text) {
-      if (text === '') return;
-      this.markedValue = markedWrap(text);
-      this.makeSilde(text);
+    ...mapActions('edit', ['setText']),
+    updateText(text) {
+      // テキスト更新(入力のたびに更新)
+      this.markedValue = text;
     },
-    // スライドの生成
     makeSilde(text) {
-      this.slides = [...slide(text)].map(v => markedWrap(v));
+      // スライドの生成
+      this.slides = [...slide(text)].map(v => v);
     }
   }
 };

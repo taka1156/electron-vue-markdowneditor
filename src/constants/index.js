@@ -1,3 +1,3 @@
-import SampleMarkdown from 'src/constants/sample.md';
+import { md } from '@/constants/sample.md.js';
 
-export { SampleMarkdown };
+export { md };

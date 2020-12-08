@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="preview-area__text">Preview</p>
+    <base-text>Preview</base-text>
     <div class="preview-area" :class="{ 'expand-slide': isExpand }">
       <div class="markdown-body" v-html="markedValue"></div>
     </div>
@@ -8,19 +8,30 @@
 </template>
 
 <script>
+import BaseText from '../../atoms/BaseText/BaseText';
 import 'highlight.js/styles/github.css';
+import { markedWrap } from '@/plugins/marked/index.js';
+import { md } from '@/constants/index.js';
 
 export default {
   name: 'PreviewArea',
+  components: {
+    'base-text': BaseText
+  },
   props: {
     isExpand: {
       type: Boolean,
       default: false
     },
-    markedValue: {
+    rowText: {
       type: String,
       default: '',
       required: true
+    }
+  },
+  computed: {
+    markedValue() {
+      return markedWrap(this.rowText === '' ? md : this.rowText);
     }
   }
 };
@@ -34,11 +45,6 @@ export default {
   overflow-y: scroll;
   margin: 1px;
   background-color: white;
-}
-
-.preview-area__text {
-  margin: 0;
-  padding: 0;
 }
 
 .expand-slide {

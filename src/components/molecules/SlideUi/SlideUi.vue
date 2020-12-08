@@ -6,7 +6,7 @@
       @keydown.shift.78="nextPage()"
       @keydown.shift.80="prevPage()"
     >
-      <preview-area :is-expand="isExpandSlide" :marked-value="slide" />
+      <preview-area :is-expand="isExpandSlide" :row-text="slide" />
       <div class="slide-ui">
         <button class="slide-ui__btn" @click="prevPage()">&lt;</button>
         <button class="slide-ui__btn" @click="nextPage()">&gt;</button>
@@ -29,7 +29,8 @@ export default {
   props: {
     slides: {
       type: Array,
-      default: () => []
+      default: () => [],
+      required: true
     }
   },
   data() {
