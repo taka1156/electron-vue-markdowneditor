@@ -44,8 +44,9 @@ export default {
     ...mapActions('edit', ['setText']),
     isSave() {
       // 最後に開いた状態と現在のファイルに差分があれば、確認をおこなう
-      if (this.Difference) {
-        return confirm('現在のファイルを保存していませんが、よろしいですか?');
+      if (this.isDifference) {
+        const isOk = confirm('現在のファイルを保存していませんが、よろしいですか?');
+        return isOk;
       } else {
         return true;
       }
