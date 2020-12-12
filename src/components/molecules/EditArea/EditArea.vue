@@ -38,7 +38,7 @@ export default {
 </script>
 
 <style scoped>
-::v-deep .base-text-area {
+::v-deep .base-text-area--extend {
   width: 40vw;
   height: 470px;
   margin: 1px;
