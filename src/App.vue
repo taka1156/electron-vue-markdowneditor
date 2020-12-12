@@ -11,6 +11,7 @@
 
 <script>
 import TheNavigation from '@/components/organisms/TheNavigation/TheNavigation';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   components: {
@@ -41,6 +42,20 @@ export default {
         }
       ]
     };
+  },
+  computed: {
+    ...mapGetters('setting', ['status'])
+  },
+  created() {
+    this.restoreSetting();
+    if (!this.status) {
+      this.initSetting();
+      alert('初期スタイルを生成したので開き直します。');
+      location.reload();
+    }
+  },
+  methods: {
+    ...mapActions('setting', ['restoreSetting', 'initSetting'])
   }
 };
 </script>
@@ -61,12 +76,12 @@ export default {
 }
 
 .view {
-  height: 610px;
   width: 95%;
+  height: 610px;
   padding: 0;
   margin: 0;
-  background-color: rgba(0, 0, 0, 0.1);
   overflow-y: scroll;
   text-align: left;
+  background-color: rgba(0, 0, 0, 0.1);
 }
 </style>

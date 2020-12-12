@@ -18,7 +18,7 @@
       <div class="editor-box__editor">
         <edit-area :pre-text="inputText" @update-text="updateText" />
         <div v-if="!isSlide">
-          <preview-area :row-text="markedValue" />
+          <preview-area :row-text="mdStyleValue" />
         </div>
         <div v-else>
           <slide-ui :slides="slides" />
@@ -54,7 +54,11 @@ export default {
   },
   computed: {
     ...mapGetters('edit', ['inputText']),
-    ...mapGetters('file', ['filePath'])
+    ...mapGetters('file', ['filePath']),
+    ...mapGetters('setting', ['userSetting']),
+    mdStyleValue() {
+      return this.userSetting.styles + this.markedValue;
+    }
   },
   created() {
     if (this.inputText !== '') {

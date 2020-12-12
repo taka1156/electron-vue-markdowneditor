@@ -32,22 +32,22 @@ export default {
 
 <style scoped>
 ::v-deep .base-img {
-  height: 100%;
   width: 100%;
+  height: 100%;
 }
 
 .nav-item {
   display: block;
-  margin: 10px auto;
-  height: 60px;
   width: 80%;
+  height: 60px;
+  margin: 10px auto;
 }
 
 .nav-item__link {
   display: flex;
   flex-direction: column;
-  height: 100%;
   width: 100%;
+  height: 100%;
   text-decoration: none;
 }
 

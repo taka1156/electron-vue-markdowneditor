@@ -4,7 +4,7 @@
     <textarea
       :id="form.id"
       :value="preText"
-      class="base-text-area"
+      class="base-text-area--extend"
       :placeholder="form.placeholder"
       @input="sendText"
     ></textarea>
@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: 'TextArea',
+  name: 'BaseTextArea',
   props: {
     preText: {
       type: String,
@@ -35,6 +35,10 @@ export default {
 </script>
 
 <style scoped>
+label {
+  margin: 20px;
+}
+
 textarea {
   display: block;
   padding: 0;
