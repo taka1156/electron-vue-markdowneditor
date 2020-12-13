@@ -17,7 +17,8 @@
 <script>
 import BaseTextArea from '../../atoms/BaseTextArea/BaseTextArea';
 import BaseBtn from '../../atoms/BaseBtn/BaseBtn';
-import { mapGetters, mapActions } from 'vuex';
+import { isReaload, msgCancel } from '@/plugins/dialog/userControle.js';
+import { validateSetting } from '@/plugins/validation/index.js';
 
 export default {
   name: 'SettingForm',
@@ -26,12 +27,7 @@ export default {
     'base-btn': BaseBtn
   },
   props: {
-    preText: {
-      type: String,
-      default: '',
-      reuired: true
-    },
-    form: {
+    userSetting: {
       type: Object,
       default: () => {},
       required: true
@@ -39,40 +35,33 @@ export default {
   },
   data() {
     return {
-      setting: { styles: '' }
+      setting: { styles: '' },
+      form: {
+        id: 'style-form',
+        label: 'style設定',
+        placeholder: 'style設定'
+      }
     };
   },
-  computed: {
-    ...mapGetters('setting', ['userSetting'])
-  },
   methods: {
-    ...mapActions('setting', ['restoreSetting', 'saveSetting', 'initSetting']),
     setSetting(styles) {
       this.setting.styles = styles;
     },
+    init() {
+      if (!isReaload()) {
+        msgCancel();
+      }
+      this.$emit('init');
+    },
     save() {
       // 設定が空でなく、同意が得られたらスタイル書き換え
-      if (this.setting.styles === '') {
-        alert('空のスタイルや初期スタイルを設定することはできません。');
-      } else {
-        const isOK = confirm(
-          'スタイルを適用するために再読み込みを行います。\nよろしいですか?'
-        );
-        if (!isOK) {
-          alert('キャンセルされました。');
+      if (validateSetting(this.setting)) {
+        if (!isReaload()) {
+          msgCancel();
         } else {
-          this.saveSetting(this.setting);
-          this.restore();
+          this.$emit('save', this.setting);
         }
       }
-    },
-    init() {
-      this.initSetting();
-      this.restore();
-    },
-    restore() {
-      this.restoreSetting();
-      location.reload();
     }
   }
 };

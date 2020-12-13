@@ -1,10 +1,9 @@
+import localStorageWrapper from '@/plugins/localstrage/index.js';
 /**
  * !!! alertはコチラに書き込まない
  */
 
-import { STYLES } from '@/constants/index.js';
-
-const SETTING_KEY = 'setUserStyle';
+import { SETTING } from '@/constants/index.js';
 
 const state = {
   userSetting: {},
@@ -30,23 +29,22 @@ const mutations = {
 };
 
 const actions = {
-  restoreSetting(context) {
-    const SETTING_JSON = localStorage.getItem(SETTING_KEY);
-    if (SETTING_JSON != null) {
-      const userSetting = JSON.parse(SETTING_JSON);
-      context.commit('setUserStyle', userSetting);
+  updateSetting(context) {
+    const SETTING = localStorageWrapper.updateSetting();
+    if (SETTING != null) {
+      context.commit('setUserStyle', SETTING);
       context.commit('stateChange', true);
     } else {
       context.commit('stateChange', false);
     }
   },
   saveSetting(context, setting) {
-    localStorage.setItem(SETTING_KEY, JSON.stringify(setting));
+    localStorageWrapper.saveSetting(setting);
     context.commit('setUserStyle', setting);
   },
   initSetting(context) {
-    localStorage.setItem(SETTING_KEY, JSON.stringify({ styles: STYLES }));
-    context.commit('setUserStyle', STYLES);
+    localStorageWrapper.initSetting(SETTING);
+    context.commit('setUserStyle', SETTING);
   }
 };
 

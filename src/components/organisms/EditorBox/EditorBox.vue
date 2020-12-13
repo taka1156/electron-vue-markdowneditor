@@ -33,9 +33,9 @@ import BaseBtn from '../../atoms/BaseBtn/BaseBtn';
 import EditArea from '../../molecules/EditArea/EditArea';
 import PreviewArea from '../../molecules/PreviewArea/PreviewArea';
 import SlideUi from '../../molecules/SlideUi/SlideUi';
-import { mapGetters, mapActions } from 'vuex';
 import { slide } from '@/plugins/slide/index.js';
 import { PLACEHOLDER_MARKDOWN } from '@/constants/index.js';
+import { isNewFileEdit, isOverWrite } from '@/plugins/dialog/userControle.js';
 
 export default {
   name: 'EditorBox',
@@ -45,6 +45,23 @@ export default {
     'preview-area': PreviewArea,
     'slide-ui': SlideUi
   },
+  props: {
+    setting: {
+      type: Object,
+      default: () => {},
+      required: true
+    },
+    filePath: {
+      type: String,
+      default: '',
+      required: true
+    },
+    inputText: {
+      type: String,
+      default: '',
+      required: true
+    }
+  },
   data() {
     return {
       markedValue: PLACEHOLDER_MARKDOWN,
@@ -53,11 +70,8 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('edit', ['inputText']),
-    ...mapGetters('file', ['filePath']),
-    ...mapGetters('setting', ['userSetting']),
     mdStyleValue() {
-      return this.userSetting.styles + this.markedValue;
+      return this.setting.styles + this.markedValue;
     }
   },
   created() {
@@ -70,18 +84,15 @@ export default {
   destroyed() {
     // 初期テキストでなければページを抜けるときに、入力値をvuexに保存
     if (this.markedValue !== PLACEHOLDER_MARKDOWN) {
-      this.setText(this.markedValue);
+      this.$emit('set-text', this.markedValue);
     }
   },
   methods: {
-    ...mapActions('file', ['initFileInfo', 'saveFile', 'overwriteFile']),
-    ...mapActions('edit', ['initText', 'setText']),
     newText() {
-      if (confirm('現在の入力内容を破棄してよろしいですか?')) {
+      if (isNewFileEdit()) {
         this.markedValue = PLACEHOLDER_MARKDOWN;
         this.makeSilde();
-        this.initFileInfo();
-        this.initText();
+        this.$emit('new-text');
       }
     },
     updateText(text) {
@@ -98,11 +109,11 @@ export default {
       }
     },
     save() {
-      this.saveFile(this.markedValue);
+      this.$emit('save', this.markedValue);
     },
     overWrite() {
-      if (confirm('上書きしてもよろしいですか?')) {
-        this.overwriteFile(this.markedValue);
+      if (isOverWrite()) {
+        this.$emit('over-write', this.markedValue);
       }
     }
   }

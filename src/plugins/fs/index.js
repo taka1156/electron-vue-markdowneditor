@@ -1,9 +1,14 @@
 const _fs = require('fs');
 const fs = require('fs').promises;
 import { FILE_MARKDOWN } from '@/constants/index.js';
+import {
+  msgSavefileResult,
+  msgInitfileResult,
+  msgReadfaile
+} from '@/plugins/dialog/fileIo.js';
 
 /**
- * ファイルの保存、読み込み可否に関するalertのみ記載
+ * !!! alertはコチラに書き込まない
  */
 
 // 初期フォルダ、初期ファイルの生成
@@ -12,10 +17,10 @@ const createInitFolder = async (FOLDER_PATH, FILE_PATH) => {
     await _fs.mkdirSync(FOLDER_PATH);
     try {
       await fs.writeFile(FILE_PATH, FILE_MARKDOWN);
-      alert(`${FILE_PATH}に初期フォルダ、及びサンプルを作成しました。`);
+      msgInitfileResult(FILE_PATH, true);
     } catch (e) {
       console.error(e);
-      alert(`${FILE_PATH}に初期フォルダ、及びサンプルを作成に失敗しました。`);
+      msgInitfileResult(FILE_PATH, false);
     }
   }
 };
@@ -27,7 +32,7 @@ const readFiles = async PATH => {
     const files = await _fs.readdirSync(PATH);
     fileList = files.filter(file => /.*\.md$/.test(file));
   } else {
-    alert('フォルダが存在しません');
+    msgReadfaile();
   }
   return fileList;
 };
@@ -45,10 +50,10 @@ const readFile = async FILE_PATH => {
 const saveFile = async (FILE_PATH, text) => {
   try {
     await fs.writeFile(FILE_PATH, text);
-    alert('保存しました。');
+    msgSavefileResult(true);
   } catch (e) {
     console.error(e);
-    alert('保存に失敗しました。');
+    msgSavefileResult(false);
   }
 };
 

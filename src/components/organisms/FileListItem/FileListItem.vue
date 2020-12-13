@@ -1,19 +1,23 @@
 <template>
   <div>
     <div class="file-list-item">
-      <base-text>{{ file }}</base-text>
-      <p v-if="isEdit">:[編集中]</p>
+      <base-btn @btn-click="listClick">
+        <span>
+          {{ file }}
+          <span v-if="isEdit">:[編集中]</span>
+        </span>
+      </base-btn>
     </div>
   </div>
 </template>
 
 <script>
-import BaseText from '../../atoms/BaseText/BaseText';
+import BaseBtn from '../../atoms/BaseBtn/BaseBtn';
 
 export default {
   name: 'FileListItem',
   components: {
-    'base-text': BaseText
+    'base-btn': BaseBtn
   },
   props: {
     isEdit: {
@@ -26,24 +30,43 @@ export default {
       default: '',
       required: true
     }
+  },
+  methods: {
+    listClick() {
+      this.$emit('file-select');
+    }
   }
 };
 </script>
 
 <style scoped>
-::v-deep .base-text--extend {
-  margin: 0 auto;
+::v-deep .base-btn--extend {
+  width: 86vw;
+  height: 10vh;
+  padding: 15px;
+  margin: 0;
   font-size: 20px;
+  color: gray;
+  text-align: left;
+  background-color: white;
+  border: 1px solid gray;
+  border-radius: 5px;
+  outline-color: cornflowerblue;
+}
+
+::v-deep .base-btn--extend:hover,
+::v-deep .base-btn--extend:focus,
+::v-deep .base-btn--extend:active {
+  color: cornflowerblue;
+  border: 1px solid cornflowerblue;
 }
 
 .file-list-item {
   display: flex;
-  align-items: center;
-  height: 40px;
-  padding: 10px;
-  margin: 10px;
-  background-color: white;
-  border: 1px solid cornflowerblue;
+  width: 95%;
+  height: 50px;
+  padding: 0;
+  margin: 25px auto;
   border-radius: 5px;
 }
 </style>
