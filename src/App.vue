@@ -12,6 +12,7 @@
 <script>
 import TheNavigation from '@/components/organisms/TheNavigation/TheNavigation';
 import { mapGetters, mapActions } from 'vuex';
+import { msgInitSetting } from '@/plugins/dialog/userControle.js';
 
 export default {
   components: {
@@ -49,8 +50,9 @@ export default {
   created() {
     this.updateSetting();
     if (!this.status) {
+      console.log(this.status);
       this.initSetting();
-      alert('初期スタイルを生成したので開き直します。');
+      msgInitSetting();
       location.reload();
     }
   },

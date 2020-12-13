@@ -7,6 +7,7 @@ import FsWrapper from '@/plugins/fs/index.js';
 
 const state = {
   folderPath: `${app.getPath('documents')}/md`, // 選択中のフォルダのパス
+  status: false,
   filePath: '', // ファイルまでのフルパス
   files: [], // ファイル一覧
   fileIndex: -1, //現在参照中のファイル
@@ -28,6 +29,9 @@ const getters = {
   },
   preText(state) {
     return state.preText;
+  },
+  status(state) {
+    return state.status;
   }
 };
 
@@ -50,6 +54,9 @@ const mutations = {
   // 最後に保存したテキストの内容
   setPreText(state, preText) {
     state.preText = preText;
+  },
+  statusChange(state, status) {
+    state.status = status;
   }
 };
 
@@ -59,11 +66,12 @@ const actions = {
     context.commit('setFileIndex', -1);
     context.commit('setFilePath', '');
   },
-  async initFolder() {
+  async initFolder(context) {
     const FOLDER_PATH = `${app.getPath('documents')}/md`;
     const FILE_PATH = `${FOLDER_PATH}/sample.md`;
     // 初期フォルダ、ファイルの生成
     await FsWrapper.createInitFolder(FOLDER_PATH, FILE_PATH);
+    context.commit('statusChange', true);
   },
   async readFiles(context) {
     const PATH = context.getters.folderPath;
