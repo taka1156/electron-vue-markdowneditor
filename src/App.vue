@@ -47,7 +47,7 @@ export default {
     ...mapGetters('setting', ['status'])
   },
   created() {
-    this.restoreSetting();
+    this.updateSetting();
     if (!this.status) {
       this.initSetting();
       alert('初期スタイルを生成したので開き直します。');
@@ -55,7 +55,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('setting', ['restoreSetting', 'initSetting'])
+    ...mapActions('setting', ['updateSetting', 'initSetting'])
   }
 };
 </script>

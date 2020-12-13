@@ -30,7 +30,7 @@ const mutations = {
 };
 
 const actions = {
-  restoreSetting(context) {
+  updateSetting(context) {
     const SETTING_JSON = localStorage.getItem(SETTING_KEY);
     if (SETTING_JSON != null) {
       const userSetting = JSON.parse(SETTING_JSON);

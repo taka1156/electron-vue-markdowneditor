@@ -46,7 +46,7 @@ export default {
     ...mapGetters('setting', ['userSetting'])
   },
   methods: {
-    ...mapActions('setting', ['restoreSetting', 'saveSetting', 'initSetting']),
+    ...mapActions('setting', ['updateSetting', 'saveSetting', 'initSetting']),
     setSetting(styles) {
       this.setting.styles = styles;
     },
@@ -62,16 +62,16 @@ export default {
           alert('キャンセルされました。');
         } else {
           this.saveSetting(this.setting);
-          this.restore();
+          this.update();
         }
       }
     },
     init() {
       this.initSetting();
-      this.restore();
+      this.update();
     },
-    restore() {
-      this.restoreSetting();
+    update() {
+      this.updateSetting();
       location.reload();
     }
   }
