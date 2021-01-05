@@ -50,7 +50,6 @@ export default {
   created() {
     this.updateSetting();
     if (!this.status) {
-      console.log(this.status);
       this.initSetting();
       msgInitSetting();
       location.reload();
